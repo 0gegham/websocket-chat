@@ -1,0 +1,23 @@
+server:
+  port: 9192
+
+spring:
+  jpa:
+    open-in-view: false
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: my_schema
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/chat
+    username: postgres
+    password: 123
+
+jwt:
+  token:
+    validity: 900000 # 1000 * 60 * 15
+    secret: secret
