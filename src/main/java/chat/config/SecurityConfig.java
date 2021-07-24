@@ -20,10 +20,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
-                .antMatchers("/login", "/register")
+                .antMatchers("/api/v1/auth/login", "/api/v1/auth/register")
                 .permitAll()
                 .anyRequest()
-                .permitAll();
+                .authenticated();
     }
 
     @Bean

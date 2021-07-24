@@ -74,7 +74,7 @@ public class User implements UserDetails {
         return new User.UserBuilder().username(username).password(password).authorities(authorities);
     }
 
-    public User.UserBuilder builder() {
+    public static User.UserBuilder builder() {
         return new User.UserBuilder();
     }
 
