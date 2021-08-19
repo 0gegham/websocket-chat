@@ -1,9 +1,6 @@
 package chat.config.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.Base64Codec;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,15 +38,15 @@ public class JwtProvider {
 
     public boolean validateToken(final String token) {
         try {
-            return !getBody(token).getExpiration().before(new Date());
+            return !getClaims(token).getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            log.error("JWT token is expired or invalid", e);
+            log.error("JWT token is expired or invalid");
         }
 
         return false;
     }
 
-    public Claims getBody(final String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    public Jws<Claims> getClaims(String token) throws JwtException {
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
     }
 }
