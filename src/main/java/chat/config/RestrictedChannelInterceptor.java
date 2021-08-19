@@ -50,7 +50,7 @@ public class RestrictedChannelInterceptor implements ChannelInterceptor {
             log.debug("X-Authorization: {}", token);
 
             if (jwtProvider.validateToken(token)) {
-                final String username = jwtProvider.getBody(token).getSubject();
+                final String username = jwtProvider.getClaims(token).getBody().getSubject();
                 final UserDetails user = userDetailsService.loadUserByUsername(username);
 
                 final UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(

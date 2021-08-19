@@ -2,6 +2,7 @@ package chat.service.impl;
 
 import chat.config.jwt.JwtProvider;
 import chat.exception.WrongUserException;
+import chat.models.RefreshTokenRequest;
 import chat.models.TokenResponse;
 import chat.models.entities.UserEntity;
 import chat.repositories.UserRepository;
@@ -48,10 +49,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public TokenResponse refreshToken(String username) {
+    public TokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        String username = refreshTokenRequest.getUsername();
+
         if (!userRepository.existsByUsername(username)) {
             throw new WrongUserException("User not found", HttpStatus.NOT_FOUND);
         }
+
         return new TokenResponse(username, jwtProvider.generateToken(username));
     }
 

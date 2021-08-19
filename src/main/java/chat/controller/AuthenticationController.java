@@ -1,14 +1,12 @@
 package chat.controller;
 
 import chat.mapper.UserMapper;
+import chat.models.RefreshTokenRequest;
 import chat.models.TokenResponse;
 import chat.models.dto.UserDTO;
 import chat.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 import static io.netty.handler.codec.http.HttpHeaders.Values.APPLICATION_JSON;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -33,8 +31,8 @@ public class AuthenticationController {
         return userService.login(userMapper.userDtoToUserEntity(user));
     }
 
-    @PostMapping(path = "/refreshToken")
-    public TokenResponse refreshToken(HttpServletRequest request) {
-        return userService.refreshToken(request.getHeader(HttpHeaders.AUTHORIZATION));
+    @PostMapping(path = "/refresh_token")
+    public TokenResponse refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return userService.refreshToken(refreshTokenRequest);
     }
 }
