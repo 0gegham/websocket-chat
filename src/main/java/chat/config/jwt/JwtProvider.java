@@ -46,7 +46,11 @@ public class JwtProvider {
         return false;
     }
 
-    public Jws<Claims> getClaims(String token) throws JwtException {
+    public Jws<Claims> getClaims(final String token) throws JwtException {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+    }
+
+    public long getExpirationDateTime(final String token) {
+        return getClaims(token).getBody().getExpiration().getTime();
     }
 }

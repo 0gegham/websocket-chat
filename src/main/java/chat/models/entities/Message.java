@@ -1,24 +1,27 @@
 package chat.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "message", schema = "my_schema")
+@Table(name = "message")
 public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String content;
 
     @JoinColumn(
@@ -26,7 +29,6 @@ public class Message {
             referencedColumnName = "id",
             nullable = false
     )
-    @JsonBackReference
     @ManyToOne(fetch = LAZY)
     private UserEntity owner;
 }

@@ -1,7 +1,7 @@
 package chat.controller;
 
 import chat.mapper.MessageMapper;
-import chat.models.dto.MessageDTO;
+import chat.models.dto.MessageDto;
 import chat.models.entities.Message;
 import chat.models.entities.UserEntity;
 import chat.service.MessageService;
@@ -28,7 +28,7 @@ public class ChatController {
 
     @MessageMapping("/message.send")
     @SendTo("/topic/messages")
-    public MessageDTO save(@Payload MessageDTO message, Principal principal) {
+    public MessageDto save(@Payload final MessageDto message, final Principal principal) {
         log.info("Received a message");
 
         if (!StringUtils.hasLength(message.getContent())) {
@@ -41,7 +41,7 @@ public class ChatController {
         return messageMapper.messageEntityToMessageDto(messageService.save(messageEntity));
     }
 
-    private UserEntity getOwner(Principal principal) {
+    private UserEntity getOwner(final Principal principal) {
         return userService.getByUsername(principal.getName());
     }
 

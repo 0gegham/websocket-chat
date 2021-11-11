@@ -1,7 +1,7 @@
 package chat.controller;
 
 import chat.mapper.MessageMapper;
-import chat.models.dto.MessageDTO;
+import chat.models.dto.MessageDto;
 import chat.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,7 @@ public class MessagesController {
     private final MessageMapper messageMapper;
 
     @GetMapping(path = "/all")
-    public Page<MessageDTO> allMessages(@PageableDefault(size = 10, page = 0) Pageable pageable) {
+    public Page<MessageDto> allMessages(@PageableDefault(size = 10, page = 0) Pageable pageable) {
         return messageService.all(pageable).map(messageMapper::messageEntityToMessageDto);
     }
 }

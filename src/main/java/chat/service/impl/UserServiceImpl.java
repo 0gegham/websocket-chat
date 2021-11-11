@@ -21,19 +21,20 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public String save(UserEntity user) {
+    public String save(final UserEntity user) {
 
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new WrongUserException("Username already in use", HttpStatus.BAD_REQUEST);
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        final String encryptedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
         userRepository.save(user);
         return "ok";
     }
 
     @Override
-    public TokenResponse login(UserEntity userEntity) {
+    public TokenResponse login(final UserEntity userEntity) {
         final String username = userEntity.getUsername();
         final String password = userEntity.getPassword();
 
@@ -44,25 +45,30 @@ public class UserServiceImpl implements UserService {
             throw new WrongUserException("Invalid username/password", HttpStatus.NOT_FOUND);
         }
 
-        String token = jwtProvider.generateToken(username);
-        return new TokenResponse(username, token);
+        return createTokenResponse(username);
     }
 
     @Override
-    public TokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+    public TokenResponse refreshToken(final RefreshTokenRequest refreshTokenRequest) {
         String username = refreshTokenRequest.getUsername();
 
         if (!userRepository.existsByUsername(username)) {
             throw new WrongUserException("User not found", HttpStatus.NOT_FOUND);
         }
 
-        return new TokenResponse(username, jwtProvider.generateToken(username));
+        return createTokenResponse(username);
     }
 
     @Override
-    public UserEntity getByUsername(String username) {
+    public UserEntity getByUsername(final String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new WrongUserException("User not found", HttpStatus.NOT_FOUND));
+    }
+
+    private TokenResponse createTokenResponse(final String username) {
+        final String token = jwtProvider.generateToken(username);
+        final long exp = jwtProvider.getExpirationDateTime(token);
+        return new TokenResponse(username, token, exp);
     }
 
 }

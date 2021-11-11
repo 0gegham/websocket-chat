@@ -1,29 +1,33 @@
 package chat.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
 
 import static javax.persistence.FetchType.LAZY;
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users", schema = "my_schema")
+@Table(name = "users")
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false)
     private String password;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "owner", fetch = LAZY)
+    @OneToMany(mappedBy = "owner", fetch = LAZY, cascade = CascadeType.REMOVE)
     private Set<Message> messages;
 }
